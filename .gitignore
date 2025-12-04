@@ -1,0 +1,28 @@
+# Build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+
+# IDE settings
+.vs/
+.vscode/
+*.user
+*.suo
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Logs and database files
+*.log
+*.sqlite
+*.db
+*.db-shm
+*.db-wal
+
+# Environment and tooling
+.env
+node_modules/
+coverage/
+
