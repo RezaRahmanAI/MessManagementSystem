@@ -1,9 +1,7 @@
-using System.IdentityModel.Tokens.Jwt;
+using MessManagementSystem.Api.Contracts.Requests;
+using MessManagementSystem.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MessManagementSystem.Api.Models.Requests;
-using MessManagementSystem.Api.Models.Responses;
-using MessManagementSystem.Api.Services;
 
 namespace MessManagementSystem.Api.Controllers;
 
@@ -11,58 +9,36 @@ namespace MessManagementSystem.Api.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IUserService _userService;
-    private readonly JwtProvider _jwtProvider;
+    private readonly AuthService _authService;
 
-    public AuthController(IUserService userService, JwtProvider jwtProvider)
+    public AuthController(AuthService authService)
     {
-        _userService = userService;
-        _jwtProvider = jwtProvider;
-    }
-
-    [HttpPost("register")]
-    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public IActionResult Register([FromBody] RegisterRequest request)
-    {
-        if (_userService.EmailExists(request.Email))
-        {
-            return Conflict(new { message = "A user with that email already exists." });
-        }
-
-        var user = _userService.CreateUser(request.Email, request.Password, request.Name);
-        var token = _jwtProvider.Create(user);
-        return Ok(new AuthResponse(token, user.Email, user.Name));
+        _authService = authService;
     }
 
     [HttpPost("login")]
-    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public IActionResult Login([FromBody] LoginRequest request)
+    [AllowAnonymous]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
     {
-        var user = _userService.ValidateCredentials(request.Email, request.Password);
-        if (user is null)
-        {
-            return Unauthorized(new { message = "Invalid email or password." });
-        }
-
-        var token = _jwtProvider.Create(user);
-        return Ok(new AuthResponse(token, user.Email, user.Name));
-    }
-
-    [Authorize]
-    [HttpGet("me")]
-    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
-    public IActionResult Me()
-    {
-        var email = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email)?.Value;
-        var name = User.Identity?.Name ?? string.Empty;
-
-        if (string.IsNullOrWhiteSpace(email))
+        var result = await _authService.LoginAsync(request.Email, request.Password, cancellationToken);
+        if (result is null)
         {
             return Unauthorized();
         }
 
-        return Ok(new AuthResponse(string.Empty, email, name));
+        return Ok(result);
+    }
+
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _authService.RegisterAsync(request.Email, request.FullName, request.Password, cancellationToken);
+        if (result is null)
+        {
+            return Conflict("A user with that email already exists.");
+        }
+
+        return Ok(result);
     }
 }
