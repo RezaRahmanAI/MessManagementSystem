@@ -1,7 +1,10 @@
+using System;
 using MessManagementSystem.Application.Abstractions;
 using MessManagementSystem.Infrastructure.Auth;
 using MessManagementSystem.Infrastructure.Configuration;
+using MessManagementSystem.Infrastructure.Persistence;
 using MessManagementSystem.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,8 +16,14 @@ public static class DependencyInjection
     {
         services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
 
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(connectionString));
+
         services.AddSingleton<IJwtProvider, JwtProvider>();
-        services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }
