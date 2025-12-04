@@ -1,0 +1,58 @@
+<div class="font-display bg-background-light dark:bg-background-dark min-h-screen w-full flex flex-col" style="font-family: Manrope, 'Noto Sans', sans-serif;">
+  <div class="layout-container flex h-full grow flex-col">
+    <div class="flex flex-1 items-center justify-center p-4 py-10 md:px-10 lg:px-20">
+      <div class="flex w-full max-w-2xl flex-col items-center gap-4 rounded-xl border border-border-light bg-white dark:border-border-dark dark:bg-black/20 p-6 shadow-lg md:p-8">
+        <div class="w-full">
+          <div class="flex min-w-72 flex-col gap-2 text-center">
+            <h1 class="text-3xl font-black leading-tight tracking-tight text-text-light dark:text-text-dark md:text-4xl">Set Your Preferences</h1>
+            <p class="text-base font-normal leading-normal text-slate-500 dark:text-slate-400">You can always change these settings later from your profile.</p>
+          </div>
+        </div>
+        <div class="w-full space-y-8 pt-8">
+          <div>
+            <h2 class="px-4 pb-3 pt-5 text-left text-xl font-bold leading-tight tracking-tight text-text-light dark:text-text-dark md:text-[22px]">Choose your language</h2>
+            <div class="flex px-4 py-3">
+              <div class="flex h-12 flex-1 items-center justify-center rounded-lg bg-background-light dark:bg-background-dark p-1">
+                <label class="flex h-full grow cursor-pointer items-center justify-center overflow-hidden rounded-lg px-2 text-sm font-medium leading-normal text-slate-500 has-[:checked]:bg-primary has-[:checked]:text-white dark:text-slate-400 dark:has-[:checked]:text-white">
+                  <span class="truncate">English</span>
+                  <input checked class="invisible w-0" name="language-select" type="radio" value="English" />
+                </label>
+                <label class="flex h-full grow cursor-pointer items-center justify-center overflow-hidden rounded-lg px-2 text-sm font-medium leading-normal text-slate-500 has-[:checked]:bg-primary has-[:checked]:text-white dark:text-slate-400 dark:has-[:checked]:text-white">
+                  <span class="truncate">বাংলা</span>
+                  <input class="invisible w-0" name="language-select" type="radio" value="Bengali" />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 class="px-4 pb-3 pt-5 text-left text-xl font-bold leading-tight tracking-tight text-text-light dark:text-text-dark md:text-[22px]">Notification Settings</h2>
+            <div class="flex items-center justify-between gap-4 rounded-lg bg-background-light dark:bg-background-dark p-4 min-h-14">
+              <div class="flex items-center gap-4">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-primary">
+                  <span class="material-symbols-outlined">
+                    notifications
+                  </span>
+                </div>
+                <p class="flex-1 truncate text-base font-normal leading-normal text-text-light dark:text-text-dark">Receive daily meal entry reminders</p>
+              </div>
+              <div class="shrink-0">
+                <label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full p-0.5 has-[:checked]:justify-end has-[:checked]:bg-accent dark:bg-slate-700">
+                  <div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+                  <input checked class="invisible absolute" type="checkbox" />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex w-full flex-col gap-4 pt-8">
+          <a routerLink="/onboarding/complete" class="flex h-12 w-full items-center justify-center rounded-lg bg-primary px-6 text-base font-bold text-white shadow-sm transition-colors hover:bg-primary/90">
+            Save &amp; Continue
+          </a>
+          <a routerLink="/onboarding/complete" class="flex h-12 w-full items-center justify-center rounded-lg bg-transparent px-6 text-base font-medium text-slate-500 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800">
+            Skip for Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
